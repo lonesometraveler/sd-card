@@ -1,0 +1,9 @@
+[package]
+name = "sd-card"
+version = "0.1.0"
+edition = "2021"
+authors = ["KENTARO OKUDA <lonesometraveler@mac.com>"]
+
+[dependencies]
+embedded-hal = "0.2.3"
+embedded-sdmmc = { git = "https://github.com/rust-embedded-community/embedded-sdmmc-rs", rev = "a33b10f6f1c25df663290b90429f4e1fd1c91cc0", default-features = false, features = ["defmt-log"] }
