@@ -44,23 +44,23 @@ where
     <SPI as embedded_hal::prelude::_embedded_hal_blocking_spi_Transfer<u8>>::Error:
         core::fmt::Debug,
 {
-    pub fn new(spi: SPI, cs: CS) -> Self {
+    pub fn new(spi: SPI, cs: CS) -> Result<Self, embedded_sdmmc::sdmmc::Error> {
         let mut sdmmc_spi = SdMmcSpi::new(spi, cs);
         let volume: Volume;
         let directory: Directory;
 
         {
-            let block = sdmmc_spi.acquire().unwrap();
+            let block = sdmmc_spi.acquire()?;
             let mut controller: BdController<SPI, CS> = Controller::new(block, SdMmcClock);
             volume = controller.get_volume(embedded_sdmmc::VolumeIdx(0)).unwrap();
             directory = controller.open_root_dir(&volume).unwrap();
         }
 
-        SdCard {
+        Ok(SdCard {
             sdmmc_spi,
             volume,
             directory,
-        }
+        })
     }
 
     /// Opens a file
